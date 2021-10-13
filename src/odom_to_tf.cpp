@@ -38,6 +38,7 @@ class OdomToTF : public rclcpp::Node {
 
             geometry_msgs::msg::TransformStamped tfs_;
             tfs_.header = msg->header;
+            tfs_.header.stamp = this->now();
             tfs_.header.frame_id = frame_id != "" ? frame_id : tfs_.header.frame_id;
             tfs_.child_frame_id = child_frame_id != "" ? child_frame_id : msg->child_frame_id;
             tfs_.transform.translation.x = msg->pose.pose.position.x;
