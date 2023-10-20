@@ -11,6 +11,7 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 find_package(rclcpp REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
@@ -26,7 +27,13 @@ if(BUILD_TESTING)
 endif()
 
 add_executable(odom_to_tf src/odom_to_tf.cpp)
-ament_target_dependencies(odom_to_tf rclcpp tf2_ros nav_msgs geometry_msgs)
+ament_target_dependencies(odom_to_tf 
+  rclcpp
+  tf2_ros
+  tf2_geometry_msgs
+  nav_msgs
+  geometry_msgs
+)
 
 install(TARGETS odom_to_tf
   DESTINATION lib/${PROJECT_NAME})
