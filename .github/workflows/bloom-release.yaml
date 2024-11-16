@@ -1,11 +1,8 @@
 name: bloom-release
 on:
   push:
-    paths:
-      - package.xml
-      - "*/package.xml"
-    branches:
-      - master
+    tags:
+      - "*"
 
 jobs:
   bloom-release:
