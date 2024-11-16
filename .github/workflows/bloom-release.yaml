@@ -19,7 +19,7 @@ jobs:
           github_user: gstavrinos
           git_user: George Stavrinos
           git_email: gstavrinos@protonmail.com
-          release_repository_push_url: https://github.com/${{ github.repository }}-release.git
+          release_repository_push_url: https://github.com/ros2-gbp/${{ github.repository.name }}-release.git
           tag_and_release: true
           debug_bloom: true
           # open_pr: true
