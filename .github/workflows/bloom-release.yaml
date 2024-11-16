@@ -1,8 +1,11 @@
 name: bloom-release
 on:
   push:
-    tags:
-      - "*"
+    paths:
+      - package.xml
+      - "*/package.xml"
+    branches:
+      - master
 
 jobs:
   bloom-release:
@@ -22,7 +25,7 @@ jobs:
           release_repository_push_url: https://github.com/ros2-gbp/${{ github.event.repository.name }}-release.git
           tag_and_release: true
           debug_bloom: true
-          # open_pr: true
+          open_pr: true
       - name: Create GitHub Release
         continue-on-error: true
         env:
@@ -30,4 +33,4 @@ jobs:
         run: |
           gh release create \
           ${{ steps.bloom.outputs.version }} \
-          --title "Release ${{ steps.bloom.outputs.version }}"
+          --title "${{ steps.bloom.outputs.version }}"
