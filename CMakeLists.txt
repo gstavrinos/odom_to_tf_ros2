@@ -12,11 +12,6 @@ find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
-endif()
-
 add_executable(odom_to_tf src/odom_to_tf.cpp)
 ament_target_dependencies(odom_to_tf 
   rclcpp

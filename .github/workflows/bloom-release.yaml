@@ -17,7 +17,7 @@ jobs:
         id: bloom
         uses: at-wat/bloom-release-action@v0
         with:
-          ros_distro: rolling foxy galactic humble iron jazzy
+          ros_distro: rolling foxy galactic humble jazzy
           github_token_bloom: ${{ secrets.BLOOM_GITHUB_TOKEN }}
           github_user: gstavrinos
           git_user: George Stavrinos
