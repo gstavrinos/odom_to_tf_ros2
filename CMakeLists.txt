@@ -23,5 +23,9 @@ ament_target_dependencies(odom_to_tf
 
 install(TARGETS odom_to_tf
   DESTINATION lib/${PROJECT_NAME})
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY config
+  DESTINATION share/${PROJECT_NAME})
 
 ament_package()
