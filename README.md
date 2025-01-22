@@ -11,3 +11,5 @@ A simple ros2 package (node) that reads an odom topic and generates the equivale
 - `odom_topic`: The name of the nav_msgs/Odometry topic to subscribe to.
 
 - `inverse_tf`: If true, the tf will be generated from the base_link to the odom frame. Otherwise, by default, it will be generated from the odom frame to the base_link. (default: false)
+
+- `use_original_timestamp`: If true, the tf will be generated using the timestamp from the odom message. Otherwise, by default, it will be generated using `now()`. (default: false)
