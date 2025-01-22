@@ -5,3 +5,4 @@ odom_to_tf:
     child_frame_id: "base_link"
     inverse_tf: False
     use_sim_time: True
+    use_original_timestamp: False
