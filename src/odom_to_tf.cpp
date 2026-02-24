@@ -18,7 +18,7 @@ public:
     child_frame_id_ = this->declare_parameter("child_frame_id", std::string(""));
     odom_topic = this->declare_parameter("odom_topic", std::string("/odom/perfect"));
     RCLCPP_INFO(this->get_logger(), "odom_topic set to %s", odom_topic.c_str());
-    inverse_tf_ = this->declare_parameter("inverse_tf_", false);
+    inverse_tf_ = this->declare_parameter("inverse_tf", false);
     use_original_timestamp_ = this->declare_parameter("use_original_timestamp", false);
 
     if (frame_id_ != "")
