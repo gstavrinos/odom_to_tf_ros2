@@ -41,7 +41,7 @@ public:
     }
     sub_ = this->create_subscription<nav_msgs::msg::Odometry>(odom_topic, rclcpp::SensorDataQoS(),
                                                               std::bind(&OdomToTF::odomCallback, this, _1));
-    tfb_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
+    tfb_ = std::make_shared<tf2_ros::TransformBroadcaster>(*this);
   }
 
 private:
