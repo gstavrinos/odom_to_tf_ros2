@@ -6,6 +6,8 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 #include <tf2_ros/transform_broadcaster.h>
 
+#include <stdexcept>
+
 using std::placeholders::_1;
 
 class OdomToTF : public rclcpp::Node
@@ -19,7 +21,22 @@ public:
     odom_topic = this->declare_parameter("odom_topic", std::string("/odom/perfect"));
     RCLCPP_INFO(this->get_logger(), "odom_topic set to %s", odom_topic.c_str());
     inverse_tf_ = this->declare_parameter("inverse_tf", false);
-    use_original_timestamp_ = this->declare_parameter("use_original_timestamp", false);
+
+    // NOTE: Deprecated parameter: declared without a default so we can detect whether it was set.
+    rcl_interfaces::msg::ParameterDescriptor deprecated_desc;
+    deprecated_desc.description = "DEPRECATED (inverted logic). Use use_original_odom_timestamp instead.";
+    deprecated_desc.dynamic_typing = true;
+    this->declare_parameter("use_original_timestamp", rclcpp::ParameterValue{}, deprecated_desc);
+    if (this->get_parameter("use_original_timestamp").get_type() != rclcpp::ParameterType::PARAMETER_NOT_SET)
+    {
+      RCLCPP_ERROR(this->get_logger(),
+                   "The parameter 'use_original_timestamp' is deprecated because its logic was inverted. "
+                   "Use 'use_original_odom_timestamp' instead (true = use the timestamp of the odom message, "
+                   "false = use the current time).");
+      throw std::runtime_error("Deprecated parameter 'use_original_timestamp' is set");
+    }
+
+    use_original_odom_timestamp_ = this->declare_parameter("use_original_odom_timestamp", true);
 
     if (frame_id_ != "")
     {
@@ -46,13 +63,13 @@ public:
 
 private:
   std::string frame_id_, child_frame_id_;
-  bool inverse_tf_, use_original_timestamp_;
+  bool inverse_tf_, use_original_odom_timestamp_;
   std::shared_ptr<tf2_ros::TransformBroadcaster> tfb_;
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr sub_;
   void odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg) const
   {
     geometry_msgs::msg::TransformStamped tfs_;
-    if (not use_original_timestamp_)
+    if (use_original_odom_timestamp_)
     {
       tfs_.header.stamp = msg->header.stamp;
     }
@@ -88,7 +105,16 @@ private:
 int main(int argc, char* argv[])
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<OdomToTF>());
+  int ret = 0;
+  try
+  {
+    rclcpp::spin(std::make_shared<OdomToTF>());
+  }
+  catch (const std::exception& e)
+  {
+    RCLCPP_FATAL(rclcpp::get_logger("odom_to_tf"), "Exiting: %s", e.what());
+    ret = 1;
+  }
   rclcpp::shutdown();
-  return 0;
+  return ret;
 }
